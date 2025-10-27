@@ -1,0 +1,17 @@
+{
+  "name": "sispou-desktop",
+  "version": "1.0.0",
+  "description": "Desktop application for SISPOU",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "start-server": "node server/server.js"
+  },
+  "engines": {
+    "node": "22.21.0"
+  },
+  "devDependencies": {
+    "electron": "38.4.0"
+  }
+}

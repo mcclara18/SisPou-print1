@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login de Funcionário - SISPOU</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="logo">SISPOU</div>
+            <h2>Login de Funcionário</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="login-cargo">VOCÊ É ADMINISTRADOR OU FUNCIONÁRIO?</label>
+                    <select id="login-cargo" name="cargo_fun" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Recepcionista">Funcionário</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="login-email">EMAIL</label>
+                    <input type="email" id="login-email" name="email" placeholder="hello@reallygreatsite.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">SENHA</label>
+                    <input type="password" id="login-password" name="password" placeholder="******" required>
+                </div>
+                <button type="submit" class="btn">login</button>
+                <div class="footer-link">
+                    <span>NÃO TEM LOGIN? <a href="/register">CADASTRE-SE</a></span>
+                </div>
+            </form>
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    <script src="js/auth.js"></script>
+</body>
+</html>
