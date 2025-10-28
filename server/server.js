@@ -35,7 +35,7 @@ app.get('/register', (req, res) => {
 
 // API: Registro de Funcionário
 app.post('/api/register', async (req, res) => {
-    const { nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password } = req.body;
+    const { nome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password } = req.body;
 
     if (!nome || !email || !password || !cargo_fun || !cpf) {
         return res.status(400).json({ message: 'Campos obrigatórios não preenchidos.' });
@@ -46,8 +46,8 @@ app.post('/api/register', async (req, res) => {
         const connection = await pool.getConnection();
         
         const [rows] = await connection.execute(
-            'INSERT INTO Funcionario (nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password_hash]
+            'INSERT INTO Funcionario (nome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [nome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password_hash]
         );
         
         connection.release();
@@ -83,7 +83,7 @@ app.post('/api/login', async (req, res) => {
         }
 
         const user = rows[0];
-        const passwordMatch = await bcrypt.compare(password, user.password_hash);
+        const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (passwordMatch) {
             // Em um app real, aqui você geraria um token JWT
