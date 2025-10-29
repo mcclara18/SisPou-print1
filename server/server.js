@@ -62,6 +62,8 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+
+
 // API: Login de Funcionário
 app.post('/api/login', async (req, res) => {
     const { email, password, cargo_fun } = req.body;
@@ -97,6 +99,9 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
+
+//api para cadastrar quarto
+
 
 
 app.listen(port, () => {
