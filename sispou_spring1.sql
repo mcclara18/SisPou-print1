@@ -1,12 +1,19 @@
+/* ===========================
+   BANCO DE DADOS SISPou
+   =========================== */
+
 CREATE DATABASE sispou;
 USE sispou;
 
+/* ===========================
+   TABELA: Funcionario
+   =========================== */
 CREATE TABLE Funcionario (
     id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50) NOT NULL,
     sobrenome VARCHAR(50),
     email VARCHAR(100) UNIQUE,
-    senha VARCHAR(100),
+    password VARCHAR(100),
     telefone VARCHAR(11),
     cpf VARCHAR(11) UNIQUE,
     rua VARCHAR(100),
@@ -15,6 +22,9 @@ CREATE TABLE Funcionario (
     cargo_fun enum ('Administrador', 'Recepcionista')
 );
 
+/* ===========================
+   TABELA: Usuario
+   =========================== */
 CREATE TABLE Cliente (
     id_cliente INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50) NOT NULL,
@@ -24,6 +34,9 @@ CREATE TABLE Cliente (
     cpf VARCHAR(11) UNIQUE
 );
 
+/* ===========================
+   TABELA: Quarto
+   =========================== */
 CREATE TABLE Quarto (
     id INT PRIMARY KEY AUTO_INCREMENT,
     numero INT UNIQUE,
@@ -33,6 +46,8 @@ CREATE TABLE Quarto (
 );
 
 INSERT INTO quarto (numero, capacidade, status, preco) VALUES (12, 4, 'Disponível', 325.20);
+
+/*Adicionar isso é uma procedure ou trigger*/
 
 CREATE TABLE Realiza (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -75,7 +90,7 @@ END //
 DELIMITER ;
 
 
-# call realizar_log(1, 1, 'UPDATE', 'Adicionando ar condicionado')
+call realizar_log(1, 1, 'UPDATE', 'Adicionando ar condicionado')
 
 
 

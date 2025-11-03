@@ -51,7 +51,7 @@ app.post('/api/register', async (req, res) => {
         const connection = await pool.getConnection();
         
         const [rows] = await connection.execute(
-            'INSERT INTO Funcionario (nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO Funcionario (nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password_hash]
         );
         
@@ -94,7 +94,7 @@ app.post('/api/login', async (req, res) => {
         }
 
         const user = rows[0];
-        const passwordMatch = await bcrypt.compare(password, user.senha);
+        const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (passwordMatch) {
             res.status(200).json({ message: 'Login bem-sucedido!', user: { id: user.id_funcionario, nome: user.nome, cargo: user.cargo_fun } });
