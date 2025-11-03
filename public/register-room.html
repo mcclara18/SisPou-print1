@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Quarto - SISPOU</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="logo">SISPOU</div>
+            <h2>Cadastro de Quarto</h2>
+            <form id="registerRoomForm">
+                <div class="input-group">
+                    <label for="numero">NÚMERO DO QUARTO</label>
+                    <input type="number" id="numero" name="numero" placeholder="Ex: 101" required>
+                </div>
+                <div class="input-group">
+                    <label for="capacidade">CAPACIDADE</label>
+                    <input type="number" id="capacidade" name="capacidade" placeholder="Ex: 2" required>
+                </div>
+                <div class="input-group">
+                    <label for="preco">PREÇO DA DIÁRIA</label>
+                    <input type="text" id="preco" name="preco" placeholder="Ex: 250.50" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="status">STATUS DO QUARTO</label>
+                    <select id="status" name="status" required>
+                        <option value="Disponível" selected>Disponível</option>
+                        <option value="Ocupado">Ocupado</option>
+                        <option value="Em manutenção">Em manutenção</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">Cadastrar Quarto</button>
+                <div class="footer-link">
+                    <span><a href="/dashboard">VOLTAR AO DASHBOARD</a></span>
+                </div>
+            </form>
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    <script src="js/room.js"></script>
+</body>
+</html>

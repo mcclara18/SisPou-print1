@@ -3,11 +3,14 @@
 body {
     font-family: 'Inter', sans-serif;
     background-color: #f4f4f9;
+    margin: 0;
+    height: 100vh;
+}
+
+body:not(.dashboard-body) {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
 }
 
 .container {
@@ -126,4 +129,146 @@ select {
     background-color: #f8d7da;
     color: #721c24;
     display: block;
+}
+
+.error-message {
+    color: #721c24;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    text-align: left;
+}
+
+.dashboard-header {
+    background-color: #000;
+    color: #fff;
+    padding: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    text-align: center;
+}
+
+.dashboard-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 120px 2rem 2rem; 
+    box-sizing: border-box;
+}
+
+.room-list-container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.room-item {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.room-item-details {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.room-item-details strong {
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.room-item-status {
+    font-weight: 700;
+    padding: 0.3rem 0.7rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    align-self: flex-start;
+}
+
+.status-disponivel { background-color: #d4edda; color: #155724; }
+.status-ocupado { background-color: #f8d7da; color: #721c24; }
+.status-emmanutencao { background-color: #fff3cd; color: #856404; }
+.status-indefinido { background-color: #e2e3e5; color: #383d41; }
+
+#registerRoomBtn {
+    display: none;
+    width: auto;
+    padding: 1rem 2rem;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 20;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+}
+
+.edit-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.edit-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: #888;
+}
+
+.edit-btn:hover svg {
+    fill: #000;
 }

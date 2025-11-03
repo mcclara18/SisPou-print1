@@ -16,7 +16,7 @@ async function resetAdminPassword() {
         const connection = await mysql.createConnection(dbConfig);
 
         const [result] = await connection.execute(
-            "UPDATE Funcionario SET password_hash = ? WHERE email = ? AND cargo_fun = 'Administrador'",
+            "UPDATE Funcionario SET senha = ? WHERE email = ? AND cargo_fun = 'Administrador'",
             [password_hash, email]
         );
 
