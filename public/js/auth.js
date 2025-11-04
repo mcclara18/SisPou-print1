@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok) {
                     sessionStorage.setItem('user', JSON.stringify(result.user));
-                    showMessage(result.message, 'success');
+                    showMessage(result.message, 'Login realizado');
                     setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
                 } else {
                     showMessage(result.message, 'error');

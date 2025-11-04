@@ -5,15 +5,15 @@
                 return;
             }
 
-            if (userData) {
-                document.querySelectorAll('.edit-btn').forEach(btn => {
-                    btn.style.display = 'block';
-                });
+            const registerRoomBtn = document.getElementById('registerRoomBtn');
+            if (userData.cargo === 'Administrador') {
+                registerRoomBtn.style.display = 'block';
             }
+
             registerRoomBtn.addEventListener('click', () => {
                 window.location.href = '/register-room';
             });
-
+            
             const roomList = document.getElementById('roomList');
             const modal = document.getElementById('statusModal');
             const closeModalBtn = document.querySelector('.close-button');
