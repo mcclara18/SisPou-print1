@@ -13,6 +13,58 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
+// Função para validar CPF
+function isValidCPF(cpf) {
+    // Remove caracteres especiais e espaços
+    cpf = cpf.replace(/\D/g, '');
+    
+    // Verifica se tem exatamente 11 dígitos
+    if (cpf.length !== 11) {
+        return false;
+    }
+    
+    // Verifica se todos os dígitos são iguais (CPF inválido)
+    if (/^(\d)\1{10}$/.test(cpf)) {
+        return false;
+    }
+    
+    // Calcula o primeiro dígito verificador
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+        sum += parseInt(cpf.charAt(i)) * (10 - i);
+    }
+    
+    let digit1 = 11 - (sum % 11);
+    digit1 = digit1 >= 10 ? 0 : digit1;
+    
+    // Verifica o primeiro dígito verificador
+    if (parseInt(cpf.charAt(9)) !== digit1) {
+        return false;
+    }
+    
+    // Calcula o segundo dígito verificador
+    sum = 0;
+    for (let i = 0; i < 10; i++) {
+        sum += parseInt(cpf.charAt(i)) * (11 - i);
+    }
+    
+    let digit2 = 11 - (sum % 11);
+    digit2 = digit2 >= 10 ? 0 : digit2;
+    
+    // Verifica o segundo dígito verificador
+    if (parseInt(cpf.charAt(10)) !== digit2) {
+        return false;
+    }
+    
+    return true;
+}
+
+// Função para validar email
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
 let pool;
 try {
     pool = mysql.createPool(dbConfig);
@@ -36,8 +88,11 @@ app.post('/api/register', async (req, res) => {
     if (!nome || !email || !password || !cargo_fun || !cpf) {
         return res.status(400).json({ message: 'Todos os campos marcados como obrigatórios devem ser preenchidos.' });
     }
-    if (cpf && cpf.replace(/\D/g, '').length !== 11) {
-        return res.status(400).json({ message: 'O CPF deve conter exatamente 11 dígitos.', field: 'cpf' });
+    if (!isValidEmail(email)) {
+        return res.status(400).json({ message: 'Email inválido. Verifique o email digitado.', field: 'email' });
+    }
+    if (!isValidCPF(cpf)) {
+        return res.status(400).json({ message: 'CPF inválido. Verifique o CPF digitado.', field: 'cpf' });
     }
     if (telefone && telefone.replace(/\D/g, '').length > 11) {
         return res.status(400).json({ message: 'O telefone não pode ter mais que 11 dígitos.', field: 'telefone' });
@@ -47,11 +102,33 @@ app.post('/api/register', async (req, res) => {
     }
 
     try {
-        const password_hash = await bcrypt.hash(password, 10);
+        // Verifica se o email já existe
         const connection = await pool.getConnection();
+        const [existingEmail] = await connection.execute(
+            'SELECT email FROM Funcionario WHERE email = ?',
+            [email]
+        );
+        
+        if (existingEmail.length > 0) {
+            connection.release();
+            return res.status(409).json({ message: 'Este email já está cadastrado.', field: 'email' });
+        }
+
+        // Verifica se o CPF já existe
+        const [existingCPF] = await connection.execute(
+            'SELECT cpf FROM Funcionario WHERE cpf = ?',
+            [cpf]
+        );
+        
+        if (existingCPF.length > 0) {
+            connection.release();
+            return res.status(409).json({ message: 'Este CPF já está cadastrado.', field: 'cpf' });
+        }
+
+        const password_hash = await bcrypt.hash(password, 10);
         
         const [rows] = await connection.execute(
-            'INSERT INTO Funcionario (nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO Funcionario (nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [nome, sobrenome, email, telefone, cpf, rua, bairro, numero, cargo_fun, password_hash]
         );
         
@@ -94,7 +171,7 @@ app.post('/api/login', async (req, res) => {
         }
 
         const user = rows[0];
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.senha);
 
         if (passwordMatch) {
             res.status(200).json({ message: 'Login bem-sucedido!', user: { id: user.id_funcionario, nome: user.nome, cargo: user.cargo_fun } });
