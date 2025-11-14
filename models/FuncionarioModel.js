@@ -69,7 +69,6 @@ class FuncionarioModel {
         try {
             const { nome, sobrenome, telefone, rua, bairro, numero, senha } = funcionarioData;
             
-            // Construir query dinamicamente baseado nos campos fornecidos
             const fields = [];
             const values = [];
 
