@@ -13,22 +13,17 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Função para validar CPF
 function isValidCPF(cpf) {
-    // Remove caracteres especiais e espaços
     cpf = cpf.replace(/\D/g, '');
     
-    // Verifica se tem exatamente 11 dígitos
     if (cpf.length !== 11) {
         return false;
     }
     
-    // Verifica se todos os dígitos são iguais (CPF inválido)
     if (/^(\d)\1{10}$/.test(cpf)) {
         return false;
     }
     
-    // Calcula o primeiro dígito verificador
     let sum = 0;
     for (let i = 0; i < 9; i++) {
         sum += parseInt(cpf.charAt(i)) * (10 - i);
@@ -37,12 +32,10 @@ function isValidCPF(cpf) {
     let digit1 = 11 - (sum % 11);
     digit1 = digit1 >= 10 ? 0 : digit1;
     
-    // Verifica o primeiro dígito verificador
     if (parseInt(cpf.charAt(9)) !== digit1) {
         return false;
     }
     
-    // Calcula o segundo dígito verificador
     sum = 0;
     for (let i = 0; i < 10; i++) {
         sum += parseInt(cpf.charAt(i)) * (11 - i);
@@ -51,7 +44,6 @@ function isValidCPF(cpf) {
     let digit2 = 11 - (sum % 11);
     digit2 = digit2 >= 10 ? 0 : digit2;
     
-    // Verifica o segundo dígito verificador
     if (parseInt(cpf.charAt(10)) !== digit2) {
         return false;
     }
@@ -59,7 +51,6 @@ function isValidCPF(cpf) {
     return true;
 }
 
-// Função para validar email
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -102,7 +93,6 @@ app.post('/api/register', async (req, res) => {
     }
 
     try {
-        // Verifica se o email já existe
         const connection = await pool.getConnection();
         const [existingEmail] = await connection.execute(
             'SELECT email FROM Funcionario WHERE email = ?',
@@ -114,7 +104,6 @@ app.post('/api/register', async (req, res) => {
             return res.status(409).json({ message: 'Este email já está cadastrado.', field: 'email' });
         }
 
-        // Verifica se o CPF já existe
         const [existingCPF] = await connection.execute(
             'SELECT cpf FROM Funcionario WHERE cpf = ?',
             [cpf]
@@ -152,22 +141,22 @@ app.post('/api/register', async (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-    const { email, password, cargo_fun } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !password || !cargo_fun) {
-        return res.status(400).json({ message: 'Email, senha e cargo são obrigatórios.' });
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email e senha são obrigatórios.' });
     }
 
     try {
         const connection = await pool.getConnection();
         const [rows] = await connection.execute(
-            'SELECT * FROM Funcionario WHERE email = ? AND cargo_fun = ?',
-            [email, cargo_fun]
+            'SELECT * FROM Funcionario WHERE email = ?',
+            [email]
         );
         connection.release();
 
         if (rows.length === 0) {
-            return res.status(401).json({ message: 'Credenciais inválidas ou cargo incorreto.' });
+            return res.status(401).json({ message: 'Email ou senha inválidos.' });
         }
 
         const user = rows[0];
