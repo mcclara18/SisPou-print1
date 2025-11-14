@@ -35,7 +35,7 @@ const renderRooms = (rooms) => {
         div.dataset.roomNumber = room.numero; 
         const statusValue = room.status || 'Em Manutenção';
         const statusClass = `status-${statusValue.toLowerCase().replace(/\s/g, '').replace('ê', 'e')}`;
-        const precoFormatado = (typeof room.preco === 'number') ? room.preco.toFixed(2).replace('.', ',') : '0,00';
+        const tipoFormatado = room.tipo === 'arcondicionado' ? 'Ar-Condicionado' : 'Ventilador';
 
         div.innerHTML = `
             <button class="edit-btn" data-numero="${room.numero}">
@@ -44,7 +44,7 @@ const renderRooms = (rooms) => {
             <div class="room-item-details">
                 <strong>Quarto ${room.numero}</strong>
                 <span>Capacidade: ${room.capacidade} pessoas</span><br>
-                <span>Preço: R$ ${precoFormatado}</span>
+                <span>Tipo: ${tipoFormatado}</span>
             </div>
             <div class="room-item-status ${statusClass}">
                 ${statusValue}

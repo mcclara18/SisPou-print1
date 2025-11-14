@@ -29,10 +29,10 @@ CREATE TABLE IF NOT EXISTS Quarto (
     numero INT UNIQUE,
     capacidade INT,
     status enum ('Disponível', 'Ocupado', 'Em manutenção') default 'Disponível',
-    preco DOUBLE
+    tipo enum('arcondicionado', 'ventilador')
 );
 
-INSERT INTO Quarto (numero, capacidade, status, preco) VALUES (12, 4, 'Disponível', 325.20);
+INSERT INTO Quarto (numero, capacidade, status, tipo) VALUES (12, 4, 'Disponível', 'arcondicionado');
 
 CREATE TABLE IF NOT EXISTS Realiza (
     id INT PRIMARY KEY AUTO_INCREMENT,

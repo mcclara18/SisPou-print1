@@ -66,11 +66,11 @@ try {
 }
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'html', 'login.html'));
 });
 
 app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'register.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'html', 'register.html'));
 });
 
 app.post('/api/register', async (req, res) => {
@@ -175,10 +175,14 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.post('/api/rooms', async (req, res) => {
-    const { numero, capacidade, preco, status } = req.body;
+    const { numero, capacidade, status, tipo } = req.body;
 
-    if (!numero || !capacidade || !preco || !status) {
-        return res.status(400).json({ message: 'Número, capacidade, preço e status são obrigatórios.' });
+    if (!numero || !capacidade || !status || !tipo) {
+        return res.status(400).json({ message: 'Número, capacidade, status e tipo são obrigatórios.' });
+    }
+
+    if (capacidade < 1 || capacidade > 4) {
+        return res.status(400).json({ message: 'A capacidade deve estar entre 1 e 4 pessoas.' });
     }
 
     const allowedStatus = ['Disponível', 'Ocupado', 'Em manutenção'];
@@ -186,11 +190,16 @@ app.post('/api/rooms', async (req, res) => {
         return res.status(400).json({ message: 'O status do quarto tem que ser Disponível, Ocupado ou Em manutenção.' });
     }
 
+    const allowedTipos = ['arcondicionado', 'ventilador'];
+    if (!allowedTipos.includes(tipo)) {
+        return res.status(400).json({ message: 'Tipo de quarto inválido.' });
+    }
+
     try {
         const connection = await pool.getConnection();
         await connection.execute(
-            'INSERT INTO Quarto (numero, capacidade, preco, status) VALUES (?, ?, ?, ?)',
-            [numero, capacidade, parseFloat(preco), status]
+            'INSERT INTO Quarto (numero, capacidade, status, tipo) VALUES (?, ?, ?, ?)',
+            [numero, capacidade, status, tipo]
         );
         connection.release();
         res.status(201).json({ message: 'Quarto cadastrado com sucesso!' });
@@ -206,7 +215,7 @@ app.post('/api/rooms', async (req, res) => {
 app.get('/api/rooms', async (req, res) => {
     try {
         const connection = await pool.getConnection();
-        const [rows] = await connection.execute('SELECT numero, capacidade, preco, status FROM Quarto ORDER BY numero ASC');
+        const [rows] = await connection.execute('SELECT numero, capacidade, status, tipo FROM Quarto ORDER BY numero ASC');
         connection.release();
         res.status(200).json(rows);
     } catch (error) {
@@ -244,15 +253,15 @@ app.put('/api/rooms/:numero', async (req, res) => {
 });
 
 app.get('/register-room', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'register-room.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'html', 'register-room.html'));
 });
 
 app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'register.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'html', 'register.html'));
 });
 
 app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'dashboard.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'html', 'dashboard.html'));
 });
 
 app.listen(port, () => {

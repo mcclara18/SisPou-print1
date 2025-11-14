@@ -8,5 +8,5 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
   },
   verbose: true,
-  setupFilesAfterEnv: ['./jest.setup.js'],
+  setupFilesAfterEnv: ['./config/jest.setup.js'],
 };

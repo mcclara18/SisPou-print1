@@ -2,12 +2,12 @@
   "name": "sispou-desktop",
   "version": "1.0.0",
   "description": "Desktop application for SISPOU",
-  "main": "main.js",
+  "main": "config/electron.main.js",
   "private": true,
   "scripts": {
     "start": "electron .",
     "start-server": "node server/server.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --config ./config/jest.config.js --detectOpenHandles"
   },
   "engines": {
     "node": "22.21.0"

@@ -6,9 +6,9 @@ const http = require('http');
 let serverProcess;
 
 function startBackend() {
-  const serverPath = path.join(__dirname, 'server', 'server.js');
+  const serverPath = path.join(__dirname, '..', 'server', 'server.js');
   serverProcess = spawn(process.execPath, [serverPath], {
-    cwd: path.join(__dirname, 'server'),
+    cwd: path.join(__dirname, '..', 'server'),
     stdio: 'inherit' 
   });
 

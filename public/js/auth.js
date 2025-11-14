@@ -3,22 +3,17 @@ const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const messageDiv = document.getElementById('message');
 
-// Função para validar CPF
 function isValidCPF(cpf) {
-    // Remove caracteres especiais e espaços
     cpf = cpf.replace(/\D/g, '');
     
-    // Verifica se tem exatamente 11 dígitos
     if (cpf.length !== 11) {
         return false;
     }
     
-    // Verifica se todos os dígitos são iguais (CPF inválido)
     if (/^(\d)\1{10}$/.test(cpf)) {
         return false;
     }
     
-    // Calcula o primeiro dígito verificador
     let sum = 0;
     for (let i = 0; i < 9; i++) {
         sum += parseInt(cpf.charAt(i)) * (10 - i);
@@ -27,12 +22,10 @@ function isValidCPF(cpf) {
     let digit1 = 11 - (sum % 11);
     digit1 = digit1 >= 10 ? 0 : digit1;
     
-    // Verifica o primeiro dígito verificador
     if (parseInt(cpf.charAt(9)) !== digit1) {
         return false;
     }
     
-    // Calcula o segundo dígito verificador
     sum = 0;
     for (let i = 0; i < 10; i++) {
         sum += parseInt(cpf.charAt(i)) * (11 - i);
@@ -41,7 +34,6 @@ function isValidCPF(cpf) {
     let digit2 = 11 - (sum % 11);
     digit2 = digit2 >= 10 ? 0 : digit2;
     
-    // Verifica o segundo dígito verificador
     if (parseInt(cpf.charAt(10)) !== digit2) {
         return false;
     }
@@ -49,7 +41,6 @@ function isValidCPF(cpf) {
     return true;
 }
 
-// Função para validar email
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -117,9 +108,7 @@ if (registerForm) {
         value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
         e.target.value = value;
         
-        // Validação em tempo real
         if (value.replace(/\D/g, '').length === 11) {
-            // CPF completo, valida
             const errorEl = cpfInput.parentElement.querySelector('.error-message');
             if (errorEl) {
                 errorEl.remove();
@@ -155,13 +144,11 @@ if (registerForm) {
         const formData = new FormData(registerForm);
         const data = Object.fromEntries(formData.entries());
         
-        // Validação do email antes de enviar
         if (!isValidEmail(data.email)) {
             showMessage('Email inválido. Verifique o email digitado.', 'error', 'email');
             return;
         }
         
-        // Validação do CPF antes de enviar
         if (!isValidCPF(data.cpf)) {
             showMessage('CPF inválido. Verifique os dígitos.', 'error', 'cpf');
             return;
