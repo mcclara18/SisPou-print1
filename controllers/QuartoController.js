@@ -58,25 +58,35 @@ class QuartoController {
 
 
   /** VAI LISTAR TODOS OS QUARTOS */
-   static async getAll(req, res) {
-        try {
-            const { status } = req.query;
+  static async getAll(req, res) {
+    try {
+        const { status, tipo } = req.query;
+        // console.log("Status: "+status)
+        // console.log("Tipo: "+tipo)
 
-            let quartos;
+        let quartos;
 
-            if (status) {
-                quartos = await QuartoModel.findByStatus(status); /** VAI BUSCAR O QUARTO POR STATUS NO MODELO CASO VENHA O PARÂMETRO */
-            } else {
-                quartos = await QuartoModel.findAll(); /** VAI BUSCAR TODOS OS QUARTOS */
-            }
-
-            res.status(200).json(quartos);
-
-        } catch (error) {
-            console.error("Erro ao listar quartos:", error);
-            res.status(500).json({ message: "Erro interno no servidor." });
+        if (status && tipo) {
+            quartos = await QuartoModel.findByStatusAndTipo(status, tipo);
         }
+        else if (status) {
+            quartos = await QuartoModel.findByStatus(status);
+        }
+        else if (tipo) {
+            quartos = await QuartoModel.findByTipo(tipo);
+        }
+        else {
+            quartos = await QuartoModel.findAll();
+        }
+
+        res.status(200).json(quartos);
+
+    } catch (error) {
+        console.error("Erro ao listar quartos:", error);
+        res.status(500).json({ message: "Erro interno no servidor." });
     }
+}
+
 
     static async getFilterStatus(req, res){
         try {

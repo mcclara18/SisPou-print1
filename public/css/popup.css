@@ -1,0 +1,101 @@
+/* Fundo do popup */
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0; /* top:0 left:0 width:100% height:100% */
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* Caixa central */
+.popup-content {
+    background: white;
+    padding: 22px;
+    width: 330px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.25);
+    font-family: Arial, sans-serif;
+}
+
+/* Botão X */
+.close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Títulos */
+.popup-content h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    color: #222;
+}
+
+.popup-content h4 {
+    margin: 18px 0 10px 0;
+    color: #222;
+}
+
+/* SELECT */
+#filtroStatus {
+    width: 100%;
+    padding: 9px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+/* RADIO GROUP */
+/* lista de radios */
+.radio-button-style {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* cada item: texto à esquerda, radio à direita, ambos centrados verticalmente */
+.radio-button-style li {
+    display: flex;
+    align-items: center;        /* centraliza verticalmente */
+    gap: 12px;
+    background: #f5f5f5;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #e2e2e2;
+    white-space: nowrap;        /* impede quebra do label "Com Ar-Condicionado" */
+}
+
+/* label ocupa todo o espaço à esquerda */
+.radio-button-style li label {
+    flex: 1;                    /* ocupa o espaço disponível */
+    margin: 0;
+    font-size: 15px;
+    color: #222;
+}
+
+/* radio à direita, levemente maior e alinhado verticalmente */
+.radio-button-style li input[type="radio"] {
+    margin-left: auto;          /* empurra o radio completamente para a direita */
+    transform: scale(1.2);
+    width: unset;               /* evita estilo nativo quebrando layout */
+    height: unset;
+    cursor: pointer;
+    align-self: center;
+    appearance: auto;
+}
+
+/* opcional: efeito visual quando item é clicável/hover */
+.radio-button-style li:hover {
+    background: #eef2f6;
+    border-color: #d6dbe2;
+}

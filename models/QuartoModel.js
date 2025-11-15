@@ -53,6 +53,32 @@ class QuartoModel {
         }
     }
 
+    static async findByTipo(tipo){
+        const connection = await Database.getConnection();
+        try {
+            const [rows] = await connection.execute(
+                'SELECT numero, capacidade, status, tipo FROM Quarto WHERE tipo = ? ORDER BY numero ASC',
+                [tipo]
+            );
+            return rows;
+        } finally {
+            connection.release();
+        }
+    }
+
+    static async findByStatusAndTipo(status, tipo){
+        const connection = await Database.getConnection();
+        try {
+            const [rows] = await connection.execute(
+                'SELECT numero, capacidade, status, tipo FROM Quarto WHERE status = ? AND tipo = ? ORDER BY numero ASC',
+                [status, tipo]
+            );
+            return rows;
+        } finally {
+            connection.release();
+        }
+    }
+
 
 
    

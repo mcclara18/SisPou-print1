@@ -97,19 +97,58 @@ const fetchRooms = async (filtro = "") => {
 
 
 /** FILTRA PELO SELECT */
-const filtroStatus = document.querySelector("#filtroStatus")
+/*const filtroStatus = document.querySelector("#filtroStatus")
 
 filtroStatus.addEventListener('change', ()=>{
     const status = document.getElementById("filtroStatus").value.trim();
 
     if (status !== "") {
-        /** CHAMA O FETCH PELA URI COM O PARAMETRO STATUS */
         fetchRooms(`?status=${encodeURIComponent(status)}`);
     } else {
         fetchRooms("");
     }
-})
+})*/
 
+/** APLICAR FILTRO */
+document.getElementById("aplicarfiltro").addEventListener("click", () => {
+
+    const status = document.getElementById("filtroStatus").value.trim();
+
+    const tipoRadio = document.querySelector('input[name="tipo"]:checked');
+    const tipo = tipoRadio ? tipoRadio.value : "";
+
+    const parametros = [];
+
+    if (status) parametros.push(`status=${encodeURIComponent(status)}`);
+    if (tipo) parametros.push(`tipo=${encodeURIComponent(tipo)}`);
+
+    //junta os dois parâmetros
+    const filtro = parametros.length > 0
+        ? "?" + parametros.join("&")
+        : "";
+
+    fetchRooms(filtro);
+
+    popup.style.display = "none";
+});
+
+
+/** LIMPAR FILTRO */
+
+document.getElementById("limparFiltro").addEventListener("click", () => {
+
+    // Limpa o select de status
+    document.getElementById("filtroStatus").value = "";
+
+    // Desmarca todos os radio buttons
+    document.querySelectorAll('input[name="tipo"]').forEach(r => r.checked = false);
+
+    // Busca todos os quartos sem filtro
+    fetchRooms("");
+
+    // Fecha o popup (opcional)
+    popup.style.display = "none";
+});
 
 
 closeModalBtn.onclick = () => modal.style.display = 'none';
