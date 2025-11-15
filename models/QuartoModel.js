@@ -39,6 +39,24 @@ class QuartoModel {
         }
     }
 
+    /** MÉTODO DE FILTRAGEM POR STATUS */
+    static async findByStatus(status) {
+        const connection = await Database.getConnection();
+        try {
+            const [rows] = await connection.execute(
+                'SELECT numero, capacidade, status, tipo FROM Quarto WHERE status = ? ORDER BY numero ASC',
+                [status]
+            );
+            return rows;
+        } finally {
+            connection.release();
+        }
+    }
+
+
+
+   
+
     static async create(quartoData) {
         const connection = await Database.getConnection();
         try {

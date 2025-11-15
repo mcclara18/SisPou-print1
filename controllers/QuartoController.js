@@ -56,9 +56,32 @@ class QuartoController {
         }
     }
 
-    static async getAll(req, res) {
+
+  /** VAI LISTAR TODOS OS QUARTOS */
+   static async getAll(req, res) {
         try {
-            const quartos = await QuartoModel.findAll();
+            const { status } = req.query;
+
+            let quartos;
+
+            if (status) {
+                quartos = await QuartoModel.findByStatus(status); /** VAI BUSCAR O QUARTO POR STATUS NO MODELO CASO VENHA O PARÂMETRO */
+            } else {
+                quartos = await QuartoModel.findAll(); /** VAI BUSCAR TODOS OS QUARTOS */
+            }
+
+            res.status(200).json(quartos);
+
+        } catch (error) {
+            console.error("Erro ao listar quartos:", error);
+            res.status(500).json({ message: "Erro interno no servidor." });
+        }
+    }
+
+    static async getFilterStatus(req, res){
+        try {
+            const { tipo } = req.params;
+            const quartos = await QuartoModel.findByStatus(tipo);
             res.status(200).json(quartos);
         } catch (error) {
             console.error('Erro ao listar quartos:', error);
@@ -68,6 +91,7 @@ class QuartoController {
         }
     }
 
+  
     static async updateStatus(req, res) {
         try {
             const { numero } = req.params;

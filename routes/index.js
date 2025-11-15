@@ -28,4 +28,5 @@ router.post('/api/rooms', (req, res) => QuartoController.create(req, res));
 router.get('/api/rooms', (req, res) => QuartoController.getAll(req, res));
 router.put('/api/rooms/:numero', (req, res) => QuartoController.updateStatus(req, res));
 
+
 module.exports = router;
