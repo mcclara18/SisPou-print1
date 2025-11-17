@@ -1,6 +1,5 @@
 const mysql = require('mysql2/promise');
 const dbConfig = require('../server/dbconfig');
-
 let pool;
 
 class Database {
@@ -14,17 +13,14 @@ class Database {
             process.exit(1);
         }
     }
-
     static async getConnection() {
         if (!pool) {
             await this.init();
         }
         return await pool.getConnection();
     }
-
     static getPool() {
         return pool;
     }
 }
-
 module.exports = Database;

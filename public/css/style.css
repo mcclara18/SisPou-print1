@@ -216,6 +216,23 @@ select {
     padding: 1rem 2rem;
 }
 
+#registerClientBtn {
+    width: auto;
+    padding: 1rem 2rem;
+}
+
+#registerRoomBtn, #registerClientBtn {
+    margin: 1rem 0.5rem;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -288,7 +305,6 @@ select {
     display: flex; 
     width: 100%; 
     height:4rem;  
-    /* background-color: red;  */
     align-items: center; 
     justify-content: space-between;
 }

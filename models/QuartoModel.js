@@ -13,7 +13,6 @@ class QuartoModel {
             connection.release();
         }
     }
-
     static async findById(id) {
         const connection = await Database.getConnection();
         try {
@@ -26,7 +25,6 @@ class QuartoModel {
             connection.release();
         }
     }
-
     static async findAll() {
         const connection = await Database.getConnection();
         try {
@@ -38,8 +36,6 @@ class QuartoModel {
             connection.release();
         }
     }
-
-    /** MÉTODO DE FILTRAGEM POR STATUS */
     static async findByStatus(status) {
         const connection = await Database.getConnection();
         try {
@@ -52,7 +48,6 @@ class QuartoModel {
             connection.release();
         }
     }
-
     static async findByTipo(tipo){
         const connection = await Database.getConnection();
         try {
@@ -65,7 +60,6 @@ class QuartoModel {
             connection.release();
         }
     }
-
     static async findByStatusAndTipo(status, tipo){
         const connection = await Database.getConnection();
         try {
@@ -78,11 +72,6 @@ class QuartoModel {
             connection.release();
         }
     }
-
-
-
-   
-
     static async create(quartoData) {
         const connection = await Database.getConnection();
         try {
@@ -96,7 +85,6 @@ class QuartoModel {
             connection.release();
         }
     }
-
     static async updateStatus(numero, status) {
         const connection = await Database.getConnection();
         try {
@@ -109,27 +97,20 @@ class QuartoModel {
             connection.release();
         }
     }
-
     static async update(id, quartoData) {
         const connection = await Database.getConnection();
         try {
             const { numero, capacidade, status, tipo } = quartoData;
-            
-            // Construir query dinamicamente baseado nos campos fornecidos
             const fields = [];
             const values = [];
-
             if (numero !== undefined) { fields.push('numero = ?'); values.push(numero); }
             if (capacidade !== undefined) { fields.push('capacidade = ?'); values.push(capacidade); }
             if (status !== undefined) { fields.push('status = ?'); values.push(status); }
             if (tipo !== undefined) { fields.push('tipo = ?'); values.push(tipo); }
-
             if (fields.length === 0) {
                 return false;
             }
-
-            values.push(id);
-            
+            values.push(id);   
             const query = `UPDATE Quarto SET ${fields.join(', ')} WHERE id = ?`;
             const [result] = await connection.execute(query, values);
             return result.affectedRows > 0;
@@ -137,7 +118,6 @@ class QuartoModel {
             connection.release();
         }
     }
-
     static async delete(id) {
         const connection = await Database.getConnection();
         try {

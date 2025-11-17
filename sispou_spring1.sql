@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS Cliente (
     sobrenome VARCHAR(50),
     telefone VARCHAR(11),
     email VARCHAR(100) UNIQUE,
-    cpf VARCHAR(11) UNIQUE
+    cpf VARCHAR(11) UNIQUE,
+    endereco VARCHAR(200)
 );
 
 CREATE TABLE IF NOT EXISTS Quarto (
@@ -72,6 +73,5 @@ END //
 
 DELIMITER ;
 
--- Inserir um usuário admin padrão para teste
 INSERT INTO Funcionario (nome, sobrenome, email, telefone, cpf, cargo_fun, senha) 
 VALUES ('Admin', 'Sistema', 'admin@sispou.com', '11999999999', '00000000001', 'Administrador', '$2b$10$YOixf5Q0dN/E4wWDgR8He.kHHEOA8n7Z8O0Z0Z0Z0Z0Z0Z0Z0Z');

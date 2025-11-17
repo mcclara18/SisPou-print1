@@ -13,7 +13,6 @@ class FuncionarioModel {
             connection.release();
         }
     }
-
     static async findByCPF(cpf) {
         const connection = await Database.getConnection();
         try {
@@ -26,7 +25,6 @@ class FuncionarioModel {
             connection.release();
         }
     }
-
     static async findById(id) {
         const connection = await Database.getConnection();
         try {
@@ -39,7 +37,6 @@ class FuncionarioModel {
             connection.release();
         }
     }
-
     static async create(funcionarioData) {
         const connection = await Database.getConnection();
         try {
@@ -53,7 +50,6 @@ class FuncionarioModel {
             connection.release();
         }
     }
-
     static async findAll() {
         const connection = await Database.getConnection();
         try {
@@ -63,15 +59,12 @@ class FuncionarioModel {
             connection.release();
         }
     }
-
     static async update(id, funcionarioData) {
         const connection = await Database.getConnection();
         try {
-            const { nome, sobrenome, telefone, rua, bairro, numero, senha } = funcionarioData;
-            
+            const { nome, sobrenome, telefone, rua, bairro, numero, senha } = funcionarioData; 
             const fields = [];
             const values = [];
-
             if (nome !== undefined) { fields.push('nome = ?'); values.push(nome); }
             if (sobrenome !== undefined) { fields.push('sobrenome = ?'); values.push(sobrenome); }
             if (telefone !== undefined) { fields.push('telefone = ?'); values.push(telefone); }
@@ -79,13 +72,10 @@ class FuncionarioModel {
             if (bairro !== undefined) { fields.push('bairro = ?'); values.push(bairro); }
             if (numero !== undefined) { fields.push('numero = ?'); values.push(numero); }
             if (senha !== undefined) { fields.push('senha = ?'); values.push(senha); }
-
             if (fields.length === 0) {
                 return false;
             }
-
-            values.push(id);
-            
+            values.push(id);            
             const query = `UPDATE Funcionario SET ${fields.join(', ')} WHERE id_funcionario = ?`;
             const [result] = await connection.execute(query, values);
             return result.affectedRows > 0;
@@ -93,7 +83,6 @@ class FuncionarioModel {
             connection.release();
         }
     }
-
     static async delete(id) {
         const connection = await Database.getConnection();
         try {
@@ -102,6 +91,40 @@ class FuncionarioModel {
                 [id]
             );
             return result.affectedRows > 0;
+        } finally {
+            connection.release();
+        }
+    }
+    static async findCPFInSystem(cpf) {
+        const connection = await Database.getConnection();
+        try {
+            const [funcionarioRows] = await connection.execute(
+                'SELECT * FROM Funcionario WHERE cpf = ?',
+                [cpf]
+            );
+            if (funcionarioRows.length > 0) return funcionarioRows[0];
+            const [clienteRows] = await connection.execute(
+                'SELECT * FROM Cliente WHERE cpf = ?',
+                [cpf]
+            );
+            return clienteRows.length > 0 ? clienteRows[0] : null;
+        } finally {
+            connection.release();
+        }
+    }
+    static async findEmailInSystem(email) {
+        const connection = await Database.getConnection();
+        try {
+            const [funcionarioRows] = await connection.execute(
+                'SELECT * FROM Funcionario WHERE email = ?',
+                [email]
+            );
+            if (funcionarioRows.length > 0) return funcionarioRows[0];
+            const [clienteRows] = await connection.execute(
+                'SELECT * FROM Cliente WHERE email = ?',
+                [email]
+            );
+            return clienteRows.length > 0 ? clienteRows[0] : null;
         } finally {
             connection.release();
         }

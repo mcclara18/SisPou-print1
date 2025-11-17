@@ -12,16 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const formData = new FormData(registerRoomForm);
             const data = Object.fromEntries(formData.entries());
-
             try {
                 const response = await fetch('/api/rooms', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
                 });
-
                 const result = await response.json();
-
                 if (response.ok) {
                     showMessage(result.message, 'success');
                     setTimeout(() => {
