@@ -1,0 +1,25 @@
+{
+  "name": "sispou-backend",
+  "version": "1.0.0",
+  "description": "Backend API server for SISPOU",
+  "main": "server/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "test": "jest --config ./config/jest.config.js --detectOpenHandles"
+  },
+  "engines": {
+    "node": "22.21.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.3"
+  }
+}

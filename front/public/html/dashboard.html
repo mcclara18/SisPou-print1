@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SISPOU</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="../css/popup.css">
+</head>
+<body class="dashboard-body">
+    <header class="dashboard-header">
+        SISPOU
+    </header>
+    <div class="conteiner-filter">
+        <button id="limparFiltro" class="filter-button">Limpar Filtro</button>
+        <button id="openPopupBtn" class="filter-button">Filtrar Quartos</button>
+    </div>
+    <div class="room-list-container">
+    </div>
+        <h3>Quartos Cadastrados</h3>
+        <div id="roomList" class="room-grid">
+        </div>
+    </div>
+    <button id="registerRoomBtn" class="btn">Cadastrar quarto</button>
+    <button id="registerClientBtn" class="btn">Cadastrar cliente</button>
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h4>Mudar Status do Quarto <span id="modalRoomNumber"></span></h4>
+            <form id="updateStatusForm">
+                <div class="input-group">
+                    <label for="newStatus">NOVO STATUS</label>
+                    <select id="newStatus" name="status" required>
+                        <option value="Disponível">Disponível</option>
+                        <option value="Ocupado">Ocupado</option>
+                        <option value="Em manutenção">Em manutenção</option>
+                    </select>
+                </div>
+                <input type="hidden" id="roomNumberInput" name="numero">
+                <button type="submit" class="btn">Atualizar Status</button>
+            </form>
+        </div>
+    </div>
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span id="closePopup" class="close">&times;</span>
+        <h3>Escolha uma opção</h3>
+        <label for="filtroStatus">Filtrar quarto por status</label>
+        <select id="filtroStatus">
+            <option value="">Todos</option>
+            <option value="Disponível">Disponível</option>
+            <option value="Ocupado">Ocupado</option>
+            <option value="Em manutenção">Em Manutenção</option>
+        </select>
+        <h4>Escolha um tipo:</h4>
+        <ul class="radio-button-style">
+            <li>
+                <label for="arcondicionado">Com Ar-Condicionado</label>
+                <input type="radio" name="tipo" value="arcondicionado" id="arcondicionado">
+            </li>
+            <li>
+                <label for="ventilador">Com Ventilador</label>
+                <input type="radio" name="tipo" value="ventilador" id="ventilador">
+            </li>
+        </ul>
+        <button id="aplicarfiltro" class="filter-button">Aplicar Filtro</button>
+    </div>
+</div>
+    <script src="/js/api.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="../js/popup.js"></script>
+</body>
+
+</html>

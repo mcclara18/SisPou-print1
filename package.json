@@ -1,26 +1,22 @@
 {
-  "name": "sispou-desktop",
+  "name": "sispou",
   "version": "1.0.0",
-  "description": "Desktop application for SISPOU",
-  "main": "config/electron.main.js",
+  "description": "SISPOU - Sistema de Gestão de Hotel",
+  "main": "back/config/electron.main.js",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "start-server": "node server/server.js",
-    "test": "jest --config ./config/jest.config.js --detectOpenHandles"
+    "start-back": "cd back && npm start",
+    "start-front": "cd front && npm start",
+    "dev": "concurrently \"npm run start-back\" \"npm run start-front\"",
+    "test": "cd back && npm test"
   },
   "engines": {
     "node": "22.21.0"
   },
   "devDependencies": {
-    "electron": "^38.4.0",
-    "jest": "^30.2.0",
-    "supertest": "^7.1.4"
+    "concurrently": "^8.2.2",
+    "electron": "^38.4.0"
   },
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "body-parser": "^2.2.0",
-    "express": "^5.1.0",
-    "mysql2": "^3.15.3"
-  }
+  "dependencies": {}
 }
