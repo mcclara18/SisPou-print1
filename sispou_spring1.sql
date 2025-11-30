@@ -50,9 +50,21 @@ CREATE TABLE Reserva (
 CREATE TABLE TabelaPrecoUnidade(
 	id_tabela INT PRIMARY KEY AUTO_INCREMENT,
     tipo ENUM ("arcondicionado", "ventilador"),
-    capacidade INT DEFAULT 3,
+    capacidade INT NOT NULL, #FOI ALTERADO PARA NOT NULL
 	valor_diaria DOUBLE
 );
+
+#TABELA PRECO (NÃO É PADRÃO AINDA)
+
+INSERT INTO TabelaPrecoUnidade (tipo, capacidade, valor_diaria) VALUES
+("ventilador", 1, 70),
+("ventilador", 2, 100),
+("ventilador", 3, 130),
+
+("arcondicionado", 1, 90),
+("arcondicionado", 2, 125),
+("arcondicionado", 3, 160);
+
 
 INSERT INTO Funcionario (nome, sobrenome, email, senha, telefone, cpf, rua, bairro, numero, cargo_fun)
 VALUES
@@ -67,7 +79,9 @@ VALUES
 (101, 3, "arcondicionado"),
 (102, 2, "ventilador");
 
-DROP TRIGGER tg_calcular_preco_reserva;
+
+
+
 
 DELIMITER //
 CREATE TRIGGER tg_calcular_preco_reserva
@@ -88,3 +102,29 @@ BEGIN
     SET NEW.preco = v_valor_diaria * NEW.qtd_diarias;
 END //
 DELIMITER ;
+
+
+/*UPDATE reserva SET qtd_hospedes = 2 WHERE id_reserva = 1;*/
+
+
+/*ATUALIZAR TABELA PRECO RESERVAS*/
+DELIMITER //
+CREATE TRIGGER tg_atualizar_preco_reserva
+BEFORE UPDATE ON Reserva
+FOR EACH ROW
+BEGIN
+    DECLARE v_tipo VARCHAR(50);
+    DECLARE v_capacidade INT;
+    DECLARE v_valor_diaria DOUBLE;
+
+    SELECT tipo, capacidade INTO v_tipo, v_capacidade FROM Quarto
+    WHERE id_quarto = NEW.fk_quarto_id;
+
+    SELECT valor_diaria INTO v_valor_diaria FROM TabelaPrecoUnidade
+    WHERE tipo = v_tipo AND capacidade = v_capacidade
+    LIMIT 1;
+
+    SET NEW.preco = v_valor_diaria * NEW.qtd_diarias;
+END //
+DELIMITER ;
+
