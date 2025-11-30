@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Preços - SISPOU</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="register-price-body">
+    <header class="dashboard-header">
+        SISPOU - Cadastrar Preços
+    </header>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Cadastrar Preço dos Quartos</h2>
+            <form id="priceForm">
+                <div class="input-group">
+                    <label for="room-type">TIPO DO QUARTO</label>
+                    <select id="room-type" name="tipo" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="arcondicionado">Ar-Condicionado</option>
+                        <option value="ventilador">Ventilador</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="capacity">CAPACIDADE (1-3 hospedes)</label>
+                    <input type="number" id="capacity" name="capacidade" min="1" max="3" placeholder="Digite a capacidade" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="daily-price">VALOR DA DIÁRIA (R$)</label>
+                    <input type="number" id="daily-price" name="valor_diaria" step="0.01" placeholder="Digite o valor" required>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-submit">Cadastrar</button>
+                    <a href="/dashboard" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <script src="/api/api.js"></script>
+    <script src="/js/form-handler.js"></script>
+    <script src="/js/validator.js"></script>
+    <script src="/js/register-price.js"></script>
+</body>
+</html>

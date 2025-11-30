@@ -41,19 +41,15 @@ class AuthController {
                     field: 'cargo_fun' 
                 });
             }
-            console.log(`[AuthController] Verificando CPF ${cpf} no sistema...`);
             const existingCPF = await FuncionarioModel.findCPFInSystem(cpf);
             if (existingCPF) {
-                console.log(`[AuthController] CPF ${cpf} já existe! Rejeitando...`);
                 return res.status(409).json({ 
                     message: 'Este CPF já está cadastrado.', 
                     field: 'cpf' 
                 });
             }
-            console.log(`[AuthController] Verificando email ${email} no sistema...`);
             const existingEmail = await FuncionarioModel.findEmailInSystem(email);
             if (existingEmail) {
-                console.log(`[AuthController] Email ${email} já existe! Rejeitando...`);
                 return res.status(409).json({ 
                     message: 'Este email já está cadastrado.', 
                     field: 'email' 
@@ -106,7 +102,7 @@ class AuthController {
             res.status(200).json({ 
                 message: 'Login bem-sucedido!', 
                 user: { 
-                    id: user.id_funcionario, 
+                    id_funcionario: user.id_funcionario, 
                     nome: user.nome, 
                     cargo: user.cargo_fun 
                 } 

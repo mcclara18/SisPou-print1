@@ -69,4 +69,39 @@ class FrontendValidator {
     static cleanTelefone(telefone) {
         return telefone.replace(/\D/g, '');
     }
+
+    static setupCPFInput(inputElement) {
+        inputElement.addEventListener('input', (e) => {
+            e.target.value = this.formatCPF(e.target.value);
+            
+            if (this.cleanCPF(e.target.value).length === 11) {
+                const errorEl = inputElement.parentElement.querySelector('.error-message');
+                if (errorEl) errorEl.remove();
+                
+                if (!this.isValidCPF(e.target.value)) {
+                    const erro = document.createElement('div');
+                    erro.className = 'error-message';
+                    erro.textContent = 'CPF inválido. Verifique os dígitos.';
+                    inputElement.parentElement.appendChild(erro);
+                }
+            }
+        });
+    }
+
+    static setupTelefoneInput(inputElement) {
+        inputElement.addEventListener('input', (e) => {
+            e.target.value = this.formatTelefone(e.target.value);
+        });
+    }
+
+    static setupFormValidation(formId) {
+        const form = document.getElementById(formId);
+        if (!form) return;
+
+        const cpfInputs = form.querySelectorAll('input[name="cpf"]');
+        const telInputs = form.querySelectorAll('input[name="telefone"]');
+
+        cpfInputs.forEach(input => this.setupCPFInput(input));
+        telInputs.forEach(input => this.setupTelefoneInput(input));
+    }
 }

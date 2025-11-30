@@ -1,26 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const cpfInput = document.getElementById('cpf');
-    const telInput = document.getElementById('telefone');
-
-    cpfInput.addEventListener('input', (e) => {
-        e.target.value = FrontendValidator.formatCPF(e.target.value);
-        if (FrontendValidator.cleanCPF(e.target.value).length === 11) {
-            const errorEl = cpfInput.parentElement.querySelector('.error-message');
-            if (errorEl) {
-                errorEl.remove();
-            }
-            if (!FrontendValidator.isValidCPF(e.target.value)) {
-                const erro = document.createElement('div');
-                erro.className = 'error-message';
-                erro.textContent = 'CPF inválido. Verifique os dígitos.';
-                cpfInput.parentElement.appendChild(erro);
-            }
-        }
-    });
-
-    telInput.addEventListener('input', (e) => {
-        e.target.value = FrontendValidator.formatTelefone(e.target.value);
-    });
+    FrontendValidator.setupFormValidation('clientForm');
 
     document.getElementById('clientForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -51,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (result.ok) {
             const messageEl = document.getElementById('message');
-            messageEl.textContent = '✅ Cliente cadastrado com sucesso!';
+            messageEl.textContent = 'Cliente cadastrado com sucesso!';
             messageEl.classList.add('success');
             messageEl.style.display = 'block';
             

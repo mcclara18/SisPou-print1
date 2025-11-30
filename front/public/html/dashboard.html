@@ -5,24 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SISPOU</title>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="../css/popup.css">
 </head>
 <body class="dashboard-body">
     <header class="dashboard-header">
         SISPOU
+        <button id="menuToggle" class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
     <div class="conteiner-filter">
-        <button id="limparFiltro" class="filter-button">Limpar Filtro</button>
-        <button id="openPopupBtn" class="filter-button">Filtrar Quartos</button>
+        <div id="menuContainer">
+            <button id="limparFiltro" class="filter-button">Limpar Filtro</button>
+            <button id="registerRoomBtn" class="btn">Cadastrar quarto</button>
+            <button id="registerClientBtn" class="btn">Cadastrar cliente</button>
+            <button id="registerPriceBtn" class="btn">Cadastrar Preços</button>
+            <button id="openPopupBtn" class="filter-button">Filtrar Quartos</button>
+            <button id="registerReservationBtn" class="btn">Cadastrar Reserva</button>
+        </div>
     </div>
     <div class="room-list-container">
-    </div>
         <h3>Quartos Cadastrados</h3>
         <div id="roomList" class="room-grid">
         </div>
     </div>
-    <button id="registerRoomBtn" class="btn">Cadastrar quarto</button>
-    <button id="registerClientBtn" class="btn">Cadastrar cliente</button>
+    <div class="reservation-list-container">
+        <h3>Reservas Cadastradas</h3>
+        <div id="reservationList" class="reservation-grid">
+        </div>
+    </div>
     <div id="statusModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -66,7 +78,7 @@
         <button id="aplicarfiltro" class="filter-button">Aplicar Filtro</button>
     </div>
 </div>
-    <script src="/js/api.js"></script>
+    <script src="/api/api.js"></script>
     <script src="/js/dashboard.js"></script>
     <script src="../js/popup.js"></script>
 </body>

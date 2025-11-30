@@ -43,7 +43,22 @@
             <div id="message" class="message"></div>
         </div>
     </div>
-    <script src="/js/api.js"></script>
-    <script src="/js/room.js"></script>
+    <script src="/api/api.js"></script>
+    <script src="/js/form-handler.js"></script>
+    <script>
+        const roomHandler = new FormHandler('registerRoomForm', async (handler) => {
+            const formData = new FormData(handler.form);
+            const data = Object.fromEntries(formData.entries());
+
+            const result = await APIService.createRoom(data);
+
+            if (result.ok) {
+                handler.showMessage(result.data.message, 'success');
+                handler.redirectAfterSuccess('/dashboard', 1500);
+            } else {
+                handler.showMessage(result.error, 'error');
+            }
+        });
+    </script>
 </body>
 </html>

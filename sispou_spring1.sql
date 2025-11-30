@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS sispou;
+CREATE DATABASE sispou;
 USE sispou;
 
-CREATE TABLE IF NOT EXISTS Funcionario (
+CREATE TABLE Funcionario (
     id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50) NOT NULL,
     sobrenome VARCHAR(50),
@@ -15,63 +15,76 @@ CREATE TABLE IF NOT EXISTS Funcionario (
     cargo_fun enum ('Administrador', 'Recepcionista')
 );
 
-CREATE TABLE IF NOT EXISTS Cliente (
+CREATE TABLE Cliente (
     id_cliente INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50) NOT NULL,
     sobrenome VARCHAR(50),
     telefone VARCHAR(11),
     email VARCHAR(100) UNIQUE,
     cpf VARCHAR(11) UNIQUE,
-    endereco VARCHAR(200)
+    endereco VARCHAR(150)
 );
 
-CREATE TABLE IF NOT EXISTS Quarto (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE Quarto (
+    id_quarto INT PRIMARY KEY AUTO_INCREMENT,
     numero INT UNIQUE,
     capacidade INT,
-    status enum ('Disponível', 'Ocupado', 'Em manutenção') default 'Disponível',
-    tipo enum('arcondicionado', 'ventilador')
+    tipo enum("arcondicionado", "ventilador"),
+    status enum ('Disponível', 'Ocupado', 'Em manutenção') default 'Disponível'
 );
 
-INSERT INTO Quarto (numero, capacidade, status, tipo) VALUES (12, 4, 'Disponível', 'arcondicionado');
-
-CREATE TABLE IF NOT EXISTS Realiza (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE Reserva (
+    id_reserva INT PRIMARY KEY AUTO_INCREMENT,
     fk_funcionario_id INT,
+    fk_cliente_id INT,
     fk_quarto_id INT,
-    tipo_operacao enum ('Create', 'Update', 'Delete'),
+    qtd_hospedes INT,
+    preco DOUBLE,
+    qtd_diarias INT DEFAULT 1,
     data_operacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-    descricao text,
     FOREIGN KEY (fk_funcionario_id) REFERENCES Funcionario(id_funcionario) ON DELETE RESTRICT,
-    FOREIGN KEY (fk_quarto_id) REFERENCES Quarto(id) ON DELETE RESTRICT
+    FOREIGN KEY (fk_quarto_id) REFERENCES Quarto(id_quarto) ON DELETE RESTRICT,
+    FOREIGN KEY (fk_cliente_id) REFERENCES Cliente(id_cliente) ON DELETE RESTRICT
 );
 
-DROP PROCEDURE IF EXISTS realizar_log;
+CREATE TABLE TabelaPrecoUnidade(
+	id_tabela INT PRIMARY KEY AUTO_INCREMENT,
+    tipo ENUM ("arcondicionado", "ventilador"),
+    capacidade INT DEFAULT 3,
+	valor_diaria DOUBLE
+);
+
+INSERT INTO Funcionario (nome, sobrenome, email, senha, telefone, cpf, rua, bairro, numero, cargo_fun)
+VALUES
+("Ana", "Silva", "ana@gmail.com", "123", "85999999999", "12345678901", "Rua A", "Centro", 100, "Administrador");
+
+INSERT INTO Cliente (nome, sobrenome, telefone, email, cpf)
+VALUES
+("João", "Pereira", "85988887777", "joao@gmail.com", "11122233344");
+
+INSERT INTO Quarto (numero, capacidade, tipo)
+VALUES
+(101, 3, "arcondicionado"),
+(102, 2, "ventilador");
+
+DROP TRIGGER tg_calcular_preco_reserva;
+
 DELIMITER //
-CREATE PROCEDURE realizar_log(IN id_funcionario INT, IN id_quarto INT, IN tipo_operacao VARCHAR(10), IN descricao TEXT)
+CREATE TRIGGER tg_calcular_preco_reserva
+BEFORE INSERT ON Reserva
+FOR EACH ROW
 BEGIN
-   declare cargo_fun VARCHAR(50);
-   declare quarto INT;
-   
-   SELECT fun.cargo_fun INTO cargo_fun FROM funcionario fun WHERE id_funcionario = fun.id_funcionario;
-   SELECT count(qt.id) into quarto FROM quarto qt WHERE qt.id = id_quarto;
-   
-   
-   if cargo_fun = 'Administrador' then
-		if quarto > 0 then
-			INSERT INTO realiza (fk_funcionario_id, fk_quarto_id, tipo_operacao, data_operacao, descricao)
-			VALUES (id_funcionario, id_quarto, tipo_operacao, now(), descricao);
-		else
-			select "Quarto indisponível";
-		end if;
-   else	
-		select "Só o administrador que pode modificar o quarto";
-   end if;
-   
-   
+    DECLARE v_tipo VARCHAR(50);
+    DECLARE v_capacidade INT;
+    DECLARE v_valor_diaria DOUBLE;
+
+    SELECT tipo, capacidade INTO v_tipo, v_capacidade FROM Quarto
+    WHERE id_quarto = NEW.fk_quarto_id;
+
+    SELECT valor_diaria INTO v_valor_diaria FROM TabelaPrecoUnidade
+    WHERE tipo = v_tipo AND capacidade = v_capacidade
+    LIMIT 1;
+
+    SET NEW.preco = v_valor_diaria * NEW.qtd_diarias;
 END //
-
 DELIMITER ;
-
-INSERT INTO Funcionario (nome, sobrenome, email, telefone, cpf, cargo_fun, senha) 
-VALUES ('Admin', 'Sistema', 'admin@sispou.com', '11999999999', '00000000001', 'Administrador', '$2b$10$YOixf5Q0dN/E4wWDgR8He.kHHEOA8n7Z8O0Z0Z0Z0Z0Z0Z0Z0Z');

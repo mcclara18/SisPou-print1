@@ -29,7 +29,7 @@ class QuartoModel {
         const connection = await Database.getConnection();
         try {
             const [rows] = await connection.execute(
-                'SELECT numero, capacidade, status, tipo FROM Quarto ORDER BY numero ASC'
+                'SELECT id_quarto, numero, capacidade, status, tipo FROM Quarto ORDER BY numero ASC'
             );
             return rows;
         } finally {
@@ -40,7 +40,7 @@ class QuartoModel {
         const connection = await Database.getConnection();
         try {
             const [rows] = await connection.execute(
-                'SELECT numero, capacidade, status, tipo FROM Quarto WHERE status = ? ORDER BY numero ASC',
+                'SELECT id_quarto, numero, capacidade, status, tipo FROM Quarto WHERE status = ? ORDER BY numero ASC',
                 [status]
             );
             return rows;
@@ -52,7 +52,7 @@ class QuartoModel {
         const connection = await Database.getConnection();
         try {
             const [rows] = await connection.execute(
-                'SELECT numero, capacidade, status, tipo FROM Quarto WHERE tipo = ? ORDER BY numero ASC',
+                'SELECT id_quarto, numero, capacidade, status, tipo FROM Quarto WHERE tipo = ? ORDER BY numero ASC',
                 [tipo]
             );
             return rows;
@@ -64,7 +64,7 @@ class QuartoModel {
         const connection = await Database.getConnection();
         try {
             const [rows] = await connection.execute(
-                'SELECT numero, capacidade, status, tipo FROM Quarto WHERE status = ? AND tipo = ? ORDER BY numero ASC',
+                'SELECT id_quarto, numero, capacidade, status, tipo FROM Quarto WHERE status = ? AND tipo = ? ORDER BY numero ASC',
                 [status, tipo]
             );
             return rows;
@@ -85,14 +85,27 @@ class QuartoModel {
             connection.release();
         }
     }
-    static async updateStatus(numero, status) {
+    static async updateStatus(id_or_numero, status) {
         const connection = await Database.getConnection();
         try {
-            const [result] = await connection.execute(
-                'UPDATE Quarto SET status = ? WHERE numero = ?',
-                [status, numero]
+            const value = parseInt(id_or_numero);
+            
+            let [result] = await connection.execute(
+                `UPDATE Quarto SET status = ? WHERE id_quarto = ?`,
+                [status, value]
             );
+            
+            if (result.affectedRows === 0 && value > 100) {
+                [result] = await connection.execute(
+                    `UPDATE Quarto SET status = ? WHERE numero = ?`,
+                    [status, value]
+                );
+            }
+            
             return result.affectedRows > 0;
+        } catch (error) {
+            console.error('Erro em updateStatus:', error);
+            throw error;
         } finally {
             connection.release();
         }

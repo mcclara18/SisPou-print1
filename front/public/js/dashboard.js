@@ -6,11 +6,35 @@ if (!userData) {
     return;
 }
 
+const menuToggle = document.getElementById('menuToggle');
+const menuContainer = document.getElementById('menuContainer');
+
+menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    menuContainer.classList.toggle('active');
+});
+document.querySelectorAll('#menuContainer button').forEach(button => {
+    button.addEventListener('click', () => {
+        menuToggle.classList.remove('active');
+        menuContainer.classList.remove('active');
+    });
+});
+
+document.addEventListener('click', (e) => {
+    if (!menuToggle.contains(e.target) && !menuContainer.contains(e.target)) {
+        menuToggle.classList.remove('active');
+        menuContainer.classList.remove('active');
+    }
+});
+
 const registerRoomBtn = document.getElementById('registerRoomBtn');
 const registerClientBtn = document.getElementById('registerClientBtn');
+const registerPriceBtn = document.getElementById('registerPriceBtn');
+const registerReservationBtn = document.getElementById('registerReservationBtn');
 
 if (userData.cargo === 'Administrador') {
     registerRoomBtn.style.display = 'block';
+    registerPriceBtn.style.display = 'block';
 }
 
 registerRoomBtn.addEventListener('click', () => {
@@ -21,7 +45,16 @@ registerClientBtn.addEventListener('click', () => {
     window.location.href = '/register-client';
 });
 
+registerPriceBtn.addEventListener('click', () => {
+    window.location.href = '/register-price';
+});
+
+registerReservationBtn.addEventListener('click', () => {
+    window.location.href = '/register-reservation';
+});
+
 const roomList = document.getElementById('roomList');
+const reservationList = document.getElementById('reservationList');
 const modal = document.getElementById('statusModal');
 const closeModalBtn = document.querySelector('.close-button');
 const updateStatusForm = document.getElementById('updateStatusForm');
@@ -144,3 +177,51 @@ updateStatusForm.addEventListener('submit', async (e) => {
 
 fetchRooms();
 });
+
+const renderReservations = (reservations) => {
+    reservationList.innerHTML = '';
+
+    if (!reservations || reservations.length === 0) {
+        reservationList.innerHTML = '<p>Nenhuma reserva encontrada.</p>';
+        return;
+    }
+
+    reservations.forEach(reservation => {
+        const div = document.createElement('div');
+        div.className = 'reservation-item';
+        const statusClass = `status-${reservation.quarto_status.toLowerCase().replace(/\s/g, '').replace('ê', 'e')}`;
+        const precoFormatado = reservation.preco ? `R$ ${reservation.preco.toFixed(2)}` : 'N/A';
+        
+        div.innerHTML = `
+            <div class="reservation-item-details">
+                <strong>Quarto ${reservation.quarto_numero}</strong>
+                <span>Tipo: ${reservation.quarto_tipo === 'arcondicionado' ? 'Ar-Condicionado' : 'Ventilador'}</span><br>
+                <span>Hóspedes: ${reservation.qtd_hospedes}</span><br>
+                <span>Dias: ${reservation.qtd_diarias}</span><br>
+                <span>Valor Total: ${precoFormatado}</span>
+            </div>
+            <div class="room-item-status ${statusClass}">
+                ${reservation.quarto_status}
+            </div>
+        `;
+        reservationList.appendChild(div);
+    });
+};
+
+const fetchReservations = async () => {
+    try {
+        const result = await APIService.getAllReservations();
+        
+        if (result.ok) {
+            renderReservations(result.data);
+        } else {
+            console.error("Falha ao carregar reservas:", result.error);
+            reservationList.innerHTML = '<p>Erro ao carregar as reservas.</p>';
+        }
+    } catch (error) {
+        console.error("Falha ao carregar reservas:", error);
+        reservationList.innerHTML = '<p>Erro ao carregar as reservas.</p>';
+    }
+};
+
+fetchReservations();

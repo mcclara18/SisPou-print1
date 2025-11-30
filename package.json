@@ -12,11 +12,13 @@
     "test": "cd back && npm test"
   },
   "engines": {
-    "node": "22.21.0"
+    "node": ">=18.0.0"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "electron": "^38.4.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "mysql2": "^3.15.3"
+  }
 }

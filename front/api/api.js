@@ -37,6 +37,18 @@ class APIService {
         return this._get('/api/clients');
     }
 
+    static async createPrice(data) {
+        return this._post('/api/prices', data);
+    }
+
+    static async createReservation(data) {
+        return this._post('/api/reservations', data);
+    }
+
+    static async getAllReservations() {
+        return this._get('/api/reservations');
+    }
+
     static async _get(endpoint) {
         return this._request(endpoint, { method: 'GET' });
     }
@@ -70,7 +82,14 @@ class APIService {
                 return {
                     ok: false,
                     error: data.message || 'Erro na requisição',
-                    data: data };
+                    data: data
+                };
+            }
+
+            // Se a resposta já tem 'ok' e 'data', retornar como está
+            // Senão, estruturar a resposta
+            if (data.ok !== undefined && data.data !== undefined) {
+                return data;  // Retornar a resposta do backend como está
             }
 
             return {

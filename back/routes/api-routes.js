@@ -2,6 +2,8 @@ const express = require('express');
    const AuthController = require('../controllers/AuthController');
    const QuartoController = require('../controllers/QuartoController');
    const ClienteController = require('../controllers/ClienteController');
+   const PrecoController = require('../controllers/PrecoController');
+   const ReservaController = require('../controllers/ReservaController');
 
    const router = express.Router();
 
@@ -14,5 +16,11 @@ const express = require('express');
 
    router.post('/api/clients', (req, res) => ClienteController.create(req, res));
    router.get('/api/clients', (req, res) => ClienteController.getAll(req, res));
+
+   router.post('/api/prices', (req, res) => PrecoController.create(req, res));
+   router.get('/api/prices', (req, res) => PrecoController.getAll(req, res));
+
+   router.post('/api/reservations', (req, res) => ReservaController.create(req, res));
+   router.get('/api/reservations', (req, res) => ReservaController.getAll(req, res));
 
    module.exports = router;

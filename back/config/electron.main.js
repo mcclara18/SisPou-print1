@@ -3,27 +3,49 @@ const path = require('path');
 const { spawn } = require('child_process');
 const http = require('http');
 
-let serverProcess;
+let backendProcess;
+let frontendProcess;
 let mainWindow;
 
 function startBackend() {
-  const serverPath = path.join(__dirname, '..', 'server', 'server.js');
-  const projectRoot = path.join(__dirname, '..'); // Aponta para back/
+  const backPath = path.join(__dirname, '..', 'server', 'server.js');
+  const backRoot = path.join(__dirname, '..'); // back/
   
-  console.log('🔧 Starting backend server from:', projectRoot);
+  console.log('🔧 Starting backend server...');
   
-  serverProcess = spawn(process.execPath, [serverPath], {
-    cwd: projectRoot,
+  backendProcess = spawn(process.execPath, [backPath], {
+    cwd: backRoot,
     stdio: 'inherit',
     env: { ...process.env, NODE_ENV: 'production' }
   });
 
-  serverProcess.on('error', (err) => {
-    console.error('❌ Falha ao iniciar o backend:', err);
+  backendProcess.on('error', (err) => {
+    console.error('❌ Falha ao iniciar backend:', err);
   });
 
-  serverProcess.on('exit', (code) => {
-    console.log(`📤 Backend process exited with code ${code}`);
+  backendProcess.on('exit', (code) => {
+    console.log(`📤 Backend exited with code ${code}`);
+  });
+}
+
+function startFrontend() {
+  const frontPath = path.join(__dirname, '..', '..', 'front', 'server.js');
+  const frontRoot = path.join(__dirname, '..', '..', 'front'); // front/
+  
+  console.log('🎨 Starting frontend server...');
+  
+  frontendProcess = spawn(process.execPath, [frontPath], {
+    cwd: frontRoot,
+    stdio: 'inherit',
+    env: { ...process.env, NODE_ENV: 'production' }
+  });
+
+  frontendProcess.on('error', (err) => {
+    console.error('❌ Falha ao iniciar frontend:', err);
+  });
+
+  frontendProcess.on('exit', (code) => {
+    console.log(`📤 Frontend exited with code ${code}`);
   });
 }
 
@@ -32,18 +54,14 @@ function waitForServer(url, timeout = 30000) {
     const startTime = Date.now();
     const check = () => {
       http.get(url, (res) => {
-        if (res.statusCode === 200 || res.statusCode === 404) {
-          console.log('✅ Backend server is ready!');
-          resolve();
-        } else {
-          retry();
-        }
+        console.log('✅ Servidor pronto!');
+        resolve();
       }).on('error', retry);
     };
 
     const retry = () => {
       if (Date.now() - startTime > timeout) {
-        console.warn('⚠️  Timeout esperando pelo servidor backend, carregando mesmo assim...');
+        console.warn('⚠️  Timeout, carregando mesmo assim...');
         resolve();
       } else {
         setTimeout(check, 500);
@@ -67,16 +85,16 @@ async function createWindow() {
 
   mainWindow.removeMenu();
 
-  const serverUrl = 'http://localhost:3001';
-
   try {
-    console.log('⏳ Aguardando o servidor estar pronto...');
-    await waitForServer(serverUrl);
-    console.log('📂 Carregando URL:', serverUrl);
-    mainWindow.loadURL(serverUrl);
+    console.log('⏳ Aguardando servidores...');
+    await waitForServer('http://localhost:3001'); // Backend
+    await waitForServer('http://localhost:3000'); // Frontend
+    
+    console.log('📂 Carregando frontend...');
+    mainWindow.loadURL('http://localhost:3000');
   } catch (error) {
     console.error('❌ Erro:', error.message);
-    mainWindow.loadURL(serverUrl);
+    mainWindow.loadURL('http://localhost:3000');
   }
 
   mainWindow.on('closed', () => {
@@ -85,10 +103,11 @@ async function createWindow() {
 }
 
 app.on('ready', () => {
-  console.log('🚀 Aplicação dektop SISPOU iniciando');
+  console.log('🚀 SISPOU iniciando...');
   startBackend();
+  startFrontend();
   
-  setTimeout(createWindow, 2000);
+  setTimeout(createWindow, 3000);
 });
 
 app.on('window-all-closed', () => {
@@ -99,9 +118,13 @@ app.on('window-all-closed', () => {
 });
 
 app.on('will-quit', () => {
-  if (serverProcess) {
-    console.log('🛑 Fechando');
-    serverProcess.kill();
+  if (backendProcess) {
+    console.log('🛑 Fechando backend');
+    backendProcess.kill();
+  }
+  if (frontendProcess) {
+    console.log('🛑 Fechando frontend');
+    frontendProcess.kill();
   }
 });
 

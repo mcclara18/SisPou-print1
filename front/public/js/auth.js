@@ -44,31 +44,7 @@ if (loginForm) {
 }
 
 if (registerForm) {
-    const cpfInput = document.getElementById('cpf');
-    const telInput = document.getElementById('telefone');
-
-    cpfInput.addEventListener('input', (e) => {
-        e.target.value = FrontendValidator.formatCPF(e.target.value);
-        
-        if (FrontendValidator.cleanCPF(e.target.value).length === 11) {
-            const errorEl = cpfInput.parentElement.querySelector('.error-message');
-            if (errorEl) {
-                errorEl.remove();
-            }
-            
-            if (!FrontendValidator.isValidCPF(e.target.value)) {
-                const erro = document.createElement('div');
-                erro.className = 'error-message';
-                erro.textContent = 'CPF inválido. Verifique os dígitos.';
-                cpfInput.parentElement.appendChild(erro);
-            }
-        }
-    });
-
-    telInput.addEventListener('input', (e) => {
-        e.target.value = FrontendValidator.formatTelefone(e.target.value);
-    });
-
+    FrontendValidator.setupFormValidation('registerForm');
 
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();

@@ -1,10 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
 const Database = require('../models/Database.js');
 const apiRoutes = require('../routes/api-routes.js');
-const frontendRoutes = require(path.join(__dirname, '../../front/public/routes/frontend-routes'));
-
 
 const app = express();
 const port = 3001; 
@@ -17,8 +14,20 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../../front/public')));
+
+app.use('/', apiRoutes);
 
 async function initializeApp() {
     try {
@@ -29,9 +38,6 @@ async function initializeApp() {
         process.exit(1);
     }
 }
-
-app.use('/', frontendRoutes); 
-app.use('/', apiRoutes);
 
 app.use((err, req, res, next) => {
     console.error('Erro: ', err);
@@ -45,7 +51,7 @@ async function startServer() {
     await initializeApp();
 
     app.listen(port, 'localhost', () => {
-        console.log('Abrindo o Electron');
+        console.log(`✅ Backend server running on http://localhost:${port}`);
     });
 }
 
