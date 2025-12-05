@@ -52,16 +52,6 @@ if (registerForm) {
         const formData = new FormData(registerForm);
         const data = Object.fromEntries(formData.entries());  
         
-        if (!FrontendValidator.isValidEmail(data.email)) {
-            showMessage('Email inválido. Verifique o email digitado.', 'error', 'email');
-            return;
-        }    
-        
-        if (!FrontendValidator.isValidCPF(data.cpf)) {
-            showMessage('CPF inválido. Verifique os dígitos.', 'error', 'cpf');
-            return;
-        }    
-        
         const [rua, bairro, numero] = data.endereco ? data.endereco.split(',').map(s => s.trim()) : [null, null, null];
         data.rua = rua;
         data.bairro = bairro;

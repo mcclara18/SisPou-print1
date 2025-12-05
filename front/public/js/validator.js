@@ -22,46 +22,6 @@ class FrontendValidator {
         return value;
     }
 
-    static isValidCPF(cpf) {
-        cpf = cpf.replace(/\D/g, '');
-        if (cpf.length !== 11) {
-            return false;
-        }
-        
-        if (/^(\d)\1{10}$/.test(cpf)) {
-            return false;
-        }
-        
-        let sum = 0;
-        for (let i = 0; i < 9; i++) {
-            sum += parseInt(cpf.charAt(i)) * (10 - i);
-        }
-        let digit1 = 11 - (sum % 11);
-        digit1 = digit1 >= 10 ? 0 : digit1;
-        
-        if (parseInt(cpf.charAt(9)) !== digit1) {
-            return false;
-        }
-        
-        sum = 0;
-        for (let i = 0; i < 10; i++) {
-            sum += parseInt(cpf.charAt(i)) * (11 - i);
-        }
-        let digit2 = 11 - (sum % 11);
-        digit2 = digit2 >= 10 ? 0 : digit2;
-        
-        if (parseInt(cpf.charAt(10)) !== digit2) {
-            return false;
-        }
-        
-        return true;
-    }
-
-    static isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-
     static cleanCPF(cpf) {
         return cpf.replace(/\D/g, '');
     }
@@ -73,18 +33,6 @@ class FrontendValidator {
     static setupCPFInput(inputElement) {
         inputElement.addEventListener('input', (e) => {
             e.target.value = this.formatCPF(e.target.value);
-            
-            if (this.cleanCPF(e.target.value).length === 11) {
-                const errorEl = inputElement.parentElement.querySelector('.error-message');
-                if (errorEl) errorEl.remove();
-                
-                if (!this.isValidCPF(e.target.value)) {
-                    const erro = document.createElement('div');
-                    erro.className = 'error-message';
-                    erro.textContent = 'CPF inválido. Verifique os dígitos.';
-                    inputElement.parentElement.appendChild(erro);
-                }
-            }
         });
     }
 

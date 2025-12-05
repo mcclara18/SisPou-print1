@@ -21,10 +21,10 @@ class PrecoController {
             }
 
             const cap = parseInt(capacidade);
-            if (isNaN(cap) || cap < 1 || cap > 3) {
+            if (isNaN(cap) || cap < 1 || cap > 4) {
                 return res.status(400).json({
                     ok: false,
-                    message: 'Capacidade deve ser um número entre 1 e 3'
+                    message: 'Capacidade deve ser um número entre 1 e 4'
                 });
             }
 

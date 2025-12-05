@@ -22,10 +22,10 @@ class ReservaController {
             }
 
             const qtd = parseInt(qtd_hospedes);
-            if (isNaN(qtd) || qtd < 1 || qtd > 3) {
+            if (isNaN(qtd) || qtd < 1 || qtd > 4) {
                 return res.status(400).json({
                     ok: false,
-                    message: 'Quantidade de hóspedes deve ser entre 1 e 3'
+                    message: 'Quantidade de hóspedes deve ser entre 1 e 4'
                 });
             }
 

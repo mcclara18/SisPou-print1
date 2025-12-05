@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Database = require('../models/Database.js');
-const apiRoutes = require('../routes/api-routes.js')
+const apiRoutes = require('../routes/api-routes.js');
+const SanitizationMiddleware = require('../middleware/sanitizationMiddleware.js');
 
 const app = express();
 const port = 3001; 
@@ -26,6 +27,8 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+
+app.use(SanitizationMiddleware.sanitize);
 
 app.use('/', apiRoutes);
 
