@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const FuncionarioModel = require('../models/FuncionarioModel');
 const Validator = require('../utils/Validator');
-const AuthMiddleware = require('../middleware/authMiddleware');
 
 class AuthController {
     static async register(req, res) {
@@ -100,12 +99,8 @@ class AuthController {
                     message: 'Credenciais inválidas.' 
                 });
             }
-            const token = AuthMiddleware.generateToken(user);
-            
             res.status(200).json({ 
-                ok: true,
-                message: 'Login bem-sucedido!',
-                token,
+                message: 'Login bem-sucedido!', 
                 user: { 
                     id_funcionario: user.id_funcionario, 
                     nome: user.nome, 
@@ -115,7 +110,6 @@ class AuthController {
         } catch (error) {
             console.error('Erro no login:', error);
             res.status(500).json({ 
-                ok: false,
                 message: 'Erro interno no servidor.' 
             });
         }
