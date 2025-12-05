@@ -1,18 +1,30 @@
-# Dependencies
-/node_modules
+node_modules/
 /back/node_modules
 /front/node_modules
 
-# Coverage and Testing
+package-lock.json
+yarn.lock
+
 /coverage
 .nyc_output
 lcov.info
-__tests__/
+.test-results/
+*.test.log
+jest-coverage/
+coverage-report/
 
-# Configuration files
+dist/
+build/
+
 /back/server/dbconfig.js
 
-# OS generated files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
 .DS_Store
 .DS_Store?
 ._*
@@ -21,12 +33,15 @@ __tests__/
 ehthumbs.db
 Thumbs.db
 
-# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-workspace
 
-# Environment
 .env
 .env.local
+.env.*.local
+
+.cache/
+.eslintcache
