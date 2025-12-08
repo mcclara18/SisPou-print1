@@ -37,10 +37,6 @@ async function handleSubmit(handler) {
             valor_diaria: valorValue
         };
 
-        if (typeof APIService === 'undefined') {
-            throw new Error('APIService não está definido!');
-        }
-
         const result = await APIService.createPrice(data);
 
         if (result && result.ok) {

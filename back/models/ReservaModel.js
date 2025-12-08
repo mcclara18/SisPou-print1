@@ -36,14 +36,17 @@ class ReservaModel {
                     r.preco,
                     r.qtd_diarias,
                     r.data_operacao,
+                    DATE_ADD(r.data_operacao, INTERVAL r.qtd_diarias DAY) as data_checkout,
                     q.numero as quarto_numero,
                     q.status as quarto_status,
                     q.tipo as quarto_tipo,
                     c.nome as cliente_nome,
-                    c.cpf as cliente_cpf
+                    c.cpf as cliente_cpf,
+                    f.nome as funcionario_nome
                 FROM Reserva r
                 LEFT JOIN Quarto q ON r.fk_quarto_id = q.id_quarto
                 LEFT JOIN Cliente c ON r.fk_cliente_id = c.id_cliente
+                LEFT JOIN Funcionario f ON r.fk_funcionario_id = f.id_funcionario
                 ORDER BY r.data_operacao DESC
             `;
             
@@ -70,14 +73,17 @@ class ReservaModel {
                     r.preco,
                     r.qtd_diarias,
                     r.data_operacao,
+                    DATE_ADD(r.data_operacao, INTERVAL r.qtd_diarias DAY) as data_checkout,
                     q.numero as quarto_numero,
                     q.status as quarto_status,
                     q.tipo as quarto_tipo,
                     c.nome as cliente_nome,
-                    c.cpf as cliente_cpf
+                    c.cpf as cliente_cpf,
+                    f.nome as funcionario_nome
                 FROM Reserva r
                 JOIN Quarto q ON r.fk_quarto_id = q.id_quarto
                 JOIN Cliente c ON r.fk_cliente_id = c.id_cliente
+                JOIN Funcionario f ON r.fk_funcionario_id = f.id_funcionario
                 WHERE r.id_reserva = ?
             `;
             
@@ -105,6 +111,17 @@ class ReservaModel {
             const query = 'SELECT COUNT(*) as count FROM Reserva WHERE fk_cliente_id = ?';
             const [rows] = await connection.execute(query, [fk_cliente_id]);
             return rows[0].count > 0;
+        } finally {
+            await connection.release();
+        }
+    }
+
+    static async deleteByQuartoId(fk_quarto_id) {
+        const connection = await Database.getConnection();
+        try {
+            const query = 'DELETE FROM Reserva WHERE fk_quarto_id = ?';
+            const [result] = await connection.execute(query, [fk_quarto_id]);
+            return result.affectedRows > 0;
         } finally {
             await connection.release();
         }

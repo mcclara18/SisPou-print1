@@ -1,4 +1,5 @@
 const QuartoModel = require('../models/QuartoModel');
+const ReservaModel = require('../models/ReservaModel');
 const Validator = require('../utils/Validator');
 
 class QuartoController {
@@ -69,18 +70,6 @@ class QuartoController {
         res.status(500).json({ message: "Erro interno no servidor." });
     }
 }
-    static async getFilterStatus(req, res){
-        try {
-            const { tipo } = req.params;
-            const quartos = await QuartoModel.findByStatus(tipo);
-            res.status(200).json(quartos);
-        } catch (error) {
-            console.error('Erro ao listar quartos:', error);
-            res.status(500).json({ 
-                message: 'Erro interno no servidor.' 
-            });
-        }
-    }
     static async updateStatus(req, res) {
         try {
             const { numero } = req.params;
@@ -96,12 +85,26 @@ class QuartoController {
                     message: 'Status inválido. Use Disponível, Ocupado ou Em manutenção.' 
                 });
             }
+            
+            const quarto = await QuartoModel.findByNumero(numero);
+            if (!quarto) {
+                return res.status(404).json({ 
+                    message: 'Quarto não encontrado.' 
+                });
+            }
+            
             const updated = await QuartoModel.updateStatus(numero, status);
             if (!updated) {
                 return res.status(404).json({ 
                     message: 'Quarto não encontrado.' 
                 });
             }
+            
+            // Se o status mudou para "Disponível", remove todas as reservas do quarto
+            if (status === 'Disponível') {
+                await ReservaModel.deleteByQuartoId(quarto.id_quarto);
+            }
+            
             res.status(200).json({ 
                 message: 'Status do quarto atualizado com sucesso!' 
             });

@@ -4,10 +4,8 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-// Servir arquivos estáticos da pasta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Servir api.js como módulo (fora de public)
 app.use('/api', express.static(path.join(__dirname, 'api')));
 
 app.get('/', (req, res) => {
@@ -39,8 +37,8 @@ app.get('/register-reservation', (req, res) => {
 });
 
 app.listen(port, 'localhost', () => {
-    console.log(`✅ Frontend server running on http://localhost:${port}`);
-    console.log('📝 Note: APIs are expected to be running on http://localhost:3001');
+    console.log(`Frontend Rodando em: http://localhost:${port}`);
+    console.log('Back Rodando em: http://localhost:3001');
 });
 
 module.exports = app;

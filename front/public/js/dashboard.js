@@ -111,7 +111,7 @@ const fetchRooms = async (filtro = "") => {
         let result;
         
         if (filtro) {
-            const params = new URLSearchParams(filtro.substring(1)); // Remove '?'
+            const params = new URLSearchParams(filtro.substring(1)); 
             const status = params.get('status') || '';
             const tipo = params.get('tipo') || '';
             result = await APIService.getRoomsByFilter(status, tipo);
@@ -170,6 +170,7 @@ updateStatusForm.addEventListener('submit', async (e) => {
     if (result.ok) {
         modal.style.display = 'none';
         fetchRooms();
+        fetchReservations();
     } else {
         alert(`Erro: ${result.error}`);
     }
@@ -191,6 +192,7 @@ const renderReservations = (reservations) => {
         div.className = 'reservation-item';
         const statusClass = `status-${reservation.quarto_status.toLowerCase().replace(/\s/g, '').replace('ê', 'e')}`;
         const precoFormatado = reservation.preco ? `R$ ${reservation.preco.toFixed(2)}` : 'N/A';
+        const dataCheckout = new Date(reservation.data_checkout).toLocaleDateString('pt-BR');
         
         div.innerHTML = `
             <div class="reservation-item-details">
@@ -198,7 +200,9 @@ const renderReservations = (reservations) => {
                 <span>Tipo: ${reservation.quarto_tipo === 'arcondicionado' ? 'Ar-Condicionado' : 'Ventilador'}</span><br>
                 <span>Hóspedes: ${reservation.qtd_hospedes}</span><br>
                 <span>Dias: ${reservation.qtd_diarias}</span><br>
-                <span>Valor Total: ${precoFormatado}</span>
+                <span>Valor Total: ${precoFormatado}</span><br>
+                <span>Checkout: ${dataCheckout}</span><br>
+                <span>Cadastrado por: ${reservation.funcionario_nome}</span>
             </div>
             <div class="room-item-status ${statusClass}">
                 ${reservation.quarto_status}

@@ -12,14 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('email').value.trim();
         const endereco = document.getElementById('endereco').value.trim();
 
-        if (!FrontendValidator.isValidCPF(cpf)) {
-            const errorEl = document.createElement('div');
-            errorEl.className = 'error-message';
-            errorEl.textContent = 'CPF inválido. Verifique os dígitos.';
-            cpfInput.parentElement.appendChild(errorEl);
-            return;
-        }
-
         const result = await APIService.createClient({
             nome,
             cpf: FrontendValidator.cleanCPF(cpf),

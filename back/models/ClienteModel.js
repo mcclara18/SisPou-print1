@@ -95,6 +95,23 @@ class ClienteModel {
             connection.release();
         }
     }
+    static async findTelefoneInSystem(telefone) {
+        const connection = await Database.getConnection();
+        try {
+            const [clienteRows] = await connection.execute(
+                'SELECT * FROM Cliente WHERE telefone = ?',
+                [telefone]
+            );
+            if (clienteRows.length > 0) return clienteRows[0];
+            const [funcionarioRows] = await connection.execute(
+                'SELECT * FROM Funcionario WHERE telefone = ?',
+                [telefone]
+            );
+            return funcionarioRows.length > 0 ? funcionarioRows[0] : null;
+        } finally {
+            connection.release();
+        }
+    }
 }
 
 module.exports = ClienteModel;

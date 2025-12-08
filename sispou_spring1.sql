@@ -79,10 +79,6 @@ VALUES
 (101, 3, "arcondicionado"),
 (102, 2, "ventilador");
 
-
-
-
-
 DELIMITER //
 CREATE TRIGGER tg_calcular_preco_reserva
 BEFORE INSERT ON Reserva
@@ -103,11 +99,6 @@ BEGIN
 END //
 DELIMITER ;
 
-
-/*UPDATE reserva SET qtd_hospedes = 2 WHERE id_reserva = 1;*/
-
-
-/*ATUALIZAR TABELA PRECO RESERVAS*/
 DELIMITER //
 CREATE TRIGGER tg_atualizar_preco_reserva
 BEFORE UPDATE ON Reserva

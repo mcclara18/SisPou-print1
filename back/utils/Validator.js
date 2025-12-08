@@ -43,9 +43,9 @@ class Validator {
     }
 
     static isValidTelefone(telefone) {
-        if (!telefone) return true; 
+        if (!telefone) return true;
         const digitos = telefone.replace(/\D/g, '');
-        return digitos.length <= 11;
+        return digitos.length === 10 || digitos.length === 11;
     }
 
     static isValidCapacidade(capacidade) {

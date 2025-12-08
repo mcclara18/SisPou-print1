@@ -28,7 +28,7 @@ class ClienteController {
             if (!Validator.isValidTelefone(telefone)) {
                 return res.status(400).json({ 
                     ok: false,
-                    message: 'O telefone não pode ter mais que 11 dígitos.', 
+                    message: 'Telefone inválido. Deve conter 10 ou 11 dígitos (formato brasileiro).', 
                     field: 'telefone' 
                 });
             }
@@ -46,6 +46,14 @@ class ClienteController {
                     ok: false,
                     message: 'Este email já está cadastrado.', 
                     field: 'email' 
+                });
+            }
+            const existingTelefone = await ClienteModel.findTelefoneInSystem(telefone);
+            if (existingTelefone) {
+                return res.status(409).json({ 
+                    ok: false,
+                    message: 'Este telefone já está cadastrado.', 
+                    field: 'telefone' 
                 });
             }
             const clienteId = await ClienteModel.create({

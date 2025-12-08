@@ -86,11 +86,8 @@ class APIService {
                 };
             }
 
-            // Se a resposta já tem 'ok' e 'data', retornar como está
-            // Senão, estruturar a resposta
             if (data.ok !== undefined && data.data !== undefined) {
-                return data;  // Retornar a resposta do backend como está
-            }
+                return data;}
 
             return {
                 ok: true,

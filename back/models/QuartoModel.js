@@ -13,18 +13,6 @@ class QuartoModel {
             connection.release();
         }
     }
-    static async findById(id) {
-        const connection = await Database.getConnection();
-        try {
-            const [rows] = await connection.execute(
-                'SELECT * FROM Quarto WHERE id = ?',
-                [id]
-            );
-            return rows.length > 0 ? rows[0] : null;
-        } finally {
-            connection.release();
-        }
-    }
     static async findAll() {
         const connection = await Database.getConnection();
         try {
